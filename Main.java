@@ -1,5 +1,4 @@
 import java.util.InputMismatchException;
-import java.nio.channels.MembershipKey;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,6 +6,7 @@ public class Main {
 	public static ArrayList<Orders> listOrders = new ArrayList<>();
 	static Scanner input = new Scanner(System.in);
 	static Cafe cafe = new Cafe();
+    private static double banyakDiskon;
 	
 	public static void main(String[] args) {
 		initCafeData();
@@ -88,58 +88,80 @@ public class Main {
 		return pilihan;
 	}
 	
-
-	public static void discount(int totalHarga) {
-		double diskon = 0.05;
-		
-		double hitungDiskon = totalHarga-(totalHarga*diskon);
+    //overloading
+	public static double discount(double diskon, double totalHarga) {
+        double banyakDiskon = (diskon*totalHarga);
+        return banyakDiskon;
 	}
+
+    public static double discount(int totalHarga,double banyakDiskon){
+        return (totalHarga-banyakDiskon);
+    }
 	
-	public static void kasir() {
-		System.out.println("==================Daftar Menu==================");
-		System.out.println("No" + "\t\tNama"+"\t\t\tHarga");
-		for(int i = 0; i < listOrders.size(); i++) {
-			System.out.println((i+1)+"\t\t" +listOrders.get(i).namaMakanan+"\t\t\t"+listOrders.get(i).hargaMakanan);
-		}
 
-		System.out.println("Apakah punya member?: y/n");
-		String aMember = input.next();
-		
-		if(aMember.equals("y")) {
-			System.out.println("Masukan ID:");
-			String id = input.next();
-			if(cafe.isAMember(id)) {
-				System.out.println(cafe.isAMember(id));
-			}else {
-				System.out.println("Maaf anda belum terdaftar sebagai member");
-			}
-		} else if(aMember.equals("n")){
-			System.out.println("Apakah anda ingin daftar sebagai member? y/n");
-			String buat = input.next();
-			if (buat.equals("y")) {
-				addMember();
-				System.out.println("Anda telah terdaftar sebagai member! ");
-			}
-		}
-		
-		System.out.println("Masukan nama anda: ");
-		String name = input.next();
-		
-		System.out.println("Masukan pesanan anda: ");
-		int pesanan = input.nextInt();
-		
-		System.out.println("Masukan jumlah pesanan anda: ");
-		int jumlah = input.nextInt();
+public static void kasir() {
+    System.out.println("==================Daftar Menu==================");
+    System.out.println("No" + "\t\tNama" + "\t\t\tHarga");
+    for (int i = 0; i < listOrders.size(); i++) {
+        System.out.println((i + 1) + "\t\t" + listOrders.get(i).namaMakanan + "\t\t\t" + listOrders.get(i).hargaMakanan);
+    }
 
+    System.out.println("Apakah punya member?: y/n");
+    String aMember = input.next();
 
-		int totalHarga = listOrders.get(pesanan-1).hargaMakanan*jumlah;
-		if(cafe.isAMember(aMember)) {
-			discount(totalHarga);
-			System.out.println("Anda mendapat potongan harga sebesar 5%!");
-		}else{
-		System.out.println("Total belanjaan anda sebesar: Rp " +totalHarga);
-		}	
-	}
+    if (aMember.equals("y")) {
+        System.out.println("Masukan ID:");
+        String id = input.next();
+        if (cafe.isAMember(id)) {
+            System.out.println(cafe.isAMember(id));
+
+            System.out.println("Masukan nama anda: ");
+            input.next();
+
+            System.out.println("Masukan pesanan anda: ");
+            int pesanan = input.nextInt();
+
+            System.out.println("Masukan jumlah pesanan anda: ");
+            int jumlah = input.nextInt();
+
+            int totalHarga = listOrders.get(pesanan - 1).hargaMakanan * jumlah;
+
+            System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
+
+            System.out.println("Selamat anda mendapatkan diskon sebesar " + discount(0.05, totalHarga));
+            System.out.println("Jadi total belanjaan anda sebesar " + discount(totalHarga, discount(0.05, totalHarga)));
+        } else {
+            System.out.println("Maaf anda belum terdaftar sebagai member");
+            System.out.println("Apakah anda ingin daftar sebagai member? y/n");
+            String buat = input.next();
+            if (buat.equals("y")) {
+            addMember();
+            System.out.println("Anda telah terdaftar sebagai member! ");
+            }
+        }
+    } else if (aMember.equals("n")) {
+        System.out.println("Apakah anda ingin daftar sebagai member? y/n");
+        String buat = input.next();
+        if (buat.equals("y")) {
+            addMember();
+            System.out.println("Anda telah terdaftar sebagai member! ");
+        }else if(buat.equals("n")){
+            System.out.println("Masukan nama anda: ");
+            input.next();
+
+            System.out.println("Masukan pesanan anda: ");
+            int pesanan = input.nextInt();
+
+            System.out.println("Masukan jumlah pesanan anda: ");
+            int jumlah = input.nextInt();
+
+            int totalHarga = listOrders.get(pesanan - 1).hargaMakanan * jumlah;
+
+            System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
+        }
+    }
+}
+
 	
 	private static void showMembers() {
 		for (Member member : cafe.getMembers()) {
