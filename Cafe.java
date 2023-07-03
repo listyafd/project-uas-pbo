@@ -44,6 +44,7 @@ public class Cafe {
 			if (member.getId().equals(id)) {
 				isMember = true;
 				System.out.println("This ID is a member");
+				return isMember;
 			}
 		}
 	return isMember;

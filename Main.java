@@ -113,8 +113,6 @@ public static void kasir() {
         System.out.println("Masukan ID:");
         String id = input.next();
         if (cafe.isAMember(id)) {
-            System.out.println(cafe.isAMember(id));
-
             System.out.println("Masukan nama anda: ");
             input.next();
 
