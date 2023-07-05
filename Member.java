@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 	//abstract class
 	abstract class Buyer {
 	private String name;
@@ -27,22 +25,11 @@ import java.util.ArrayList;
 	
 	//inheritance
 	public class Member extends Buyer{
-		public ArrayList<Orders> foodDrinks = new ArrayList<Orders>();
-		
-		public void memesan(Orders pesanan) {
-			this.foodDrinks.add(pesanan);
-		}
-		
-		public void membatalkan(Orders pesanan) {
-			this.foodDrinks.remove(pesanan);
-		}
-		
 
 		//polimorphism overriding
 		@Override
 		void data() {
 			System.out.println(getName() +" with ID "+getId());
-			
 		}
 	}
 //third

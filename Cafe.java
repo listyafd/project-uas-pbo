@@ -29,7 +29,7 @@ public class Cafe {
 	
 	public Boolean isMemberIdExist(String id) {
 		Boolean isExist = false;
-		for (Member member : this.members) {
+		for (Member member : this.members) { //mengiterasi elemen member di arraylist members
 			if (member.getId().equals(id)) {
 				isExist = true;
 				System.out.println("This ID already taken");
@@ -44,7 +44,6 @@ public class Cafe {
 			if (member.getId().equals(id)) {
 				isMember = true;
 				System.out.println("This ID is a member");
-				return isMember;
 			}
 		}
 	return isMember;
