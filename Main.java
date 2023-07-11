@@ -4,12 +4,15 @@ import java.util.Scanner;
 
 public class Main {
 	public static ArrayList<Orders> listOrders = new ArrayList<>();
+	public static ArrayList<Member> members = new ArrayList<Member>();
 	static Scanner input = new Scanner(System.in);
 	static Cafe cafe = new Cafe(); //deklarasi variable cafe
-	
+	private static int totalHarga;
+
 	public static void main(String[] args) {
 		initCafeData();
 		initCafeOrders();
+
 		
 		String isContinue = "y";
 		
@@ -42,6 +45,7 @@ public class Main {
 		}
 	}
 
+
 	private static void initCafeOrders() { //objek-objek Orders 
 		Orders menu1 = new Orders("Burger",25000);
 		Orders menu2 = new Orders("Pasta",30000);
@@ -70,16 +74,13 @@ public class Main {
 		}
 	
 	public static void initCafeData() {
-		Member member1 = new Member();
-		member1.setId("0104");
-		member1.setName("Lucian");
-		
-		Member member2 = new Member() ;
-		member2.setId("2501");
-		member2.setName("Liara");
-		
-		cafe.getMembers().add(member1);
-		cafe.getMembers().add(member2);
+		Member member1 = new Member("9999", "Lian");
+		Member member2 = new Member("2501", "Hwang");
+		Member member3 = new Member("0104", "Leon");
+
+		cafe.addMember(member1);
+		cafe.addMember(member2);
+		cafe.addMember(member3);
 	}
 	
 	public static int chooseMenu() {
@@ -100,76 +101,38 @@ public class Main {
 	}
 	
     //overloading
-	public static double discount(double diskon, double totalHarga) {
-        double banyakDiskon = (diskon*totalHarga);
-        return banyakDiskon;
-	}
-
-    public static double discount(int totalHarga,double banyakDiskon){
-        return (totalHarga-banyakDiskon);
-    }
 	
 	public static void menuCafe(){
-    System.out.println("==================Daftar Menu==================");
-    System.out.println("No" + "\t\tNama" + "\t\t\tHarga");
-    for (int i = 0; i < listOrders.size(); i++) {
-        System.out.println((i + 1) + "\t\t" + listOrders.get(i).namaMakanan + "\t\t\t" + listOrders.get(i).hargaMakanan);
-    }
-}
-
-public static void prosesNonMember(){
-menuCafe();
-	System.out.println("Masukan nama anda: ");
-	input.next();
-
-	try {
-		System.out.println("Masukan pesanan anda: ");
-		int pesanan = input.nextInt();
-		System.out.println("Masukan jumlah pesanan anda: ");
-		int jumlah = input.nextInt();
+		System.out.println("==================Daftar Menu==================");
+		System.out.println("No" + "\t\tNama" + "\t\t\tHarga");
+		for (int i = 0; i < listOrders.size(); i++) {
+			System.out.println((i + 1) + "\t\t" + listOrders.get(i).namaMakanan + "\t\t\t" + listOrders.get(i).hargaMakanan);
+		}
+	}
 	
-		int totalHarga = listOrders.get(pesanan - 1).hargaMakanan * jumlah;
+	public static double discount(double diskon, double totalHarga) {
+		double banyakDiskon = (diskon*totalHarga);
+		return banyakDiskon;
+	}
 	
-		System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
-	} catch (Exception e) {
-		System.out.println("Masukan menu yang tersedia");
+	public static double discount(int totalHarga,double banyakDiskon){
+		return (totalHarga-banyakDiskon);
 	}
 
-}
+	public static void kasir() {
+		
+		System.out.println("Apakah punya member?: y/n");
+		String aMember = input.next();
+		
+		if (aMember.equals("y")) {
+			System.out.println("Masukan ID:");
+			String id = input.next();
+			
+			if (cafe.isAMember(id)) {
+			proses();
+			System.out.println("Selamat anda mendapatkan diskon sebesar " + discount(0.05, totalHarga)+"\n");
+			System.out.println("Jadi total belanjaan anda sebesar " + discount(totalHarga, discount(0.05, totalHarga))+"\n");
 
-public static void prosesMember(){
-	menuCafe();
-	System.out.println("Masukan nama anda: ");
-	input.next();
-
-	try {
-		System.out.println("Masukan pesanan anda: ");
-		int pesanan = input.nextInt();
-	
-		System.out.println("Masukan jumlah pesanan anda: ");
-		int jumlah = input.nextInt();
-	
-		int totalHarga = listOrders.get(pesanan - 1).hargaMakanan * jumlah;
-	
-		System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
-	
-		System.out.println("Selamat anda mendapatkan diskon sebesar " + discount(0.05, totalHarga)+"\n");
-		System.out.println("Jadi total belanjaan anda sebesar " + discount(totalHarga, discount(0.05, totalHarga))+"\n");
-	} catch (Exception e) {
-		System.out.println("Masukan menu yang tersedia");
-	}
-}
-
-public static void kasir() {
-	System.out.println("Apakah punya member?: y/n");
-    String aMember = input.next();
-
-    if (aMember.equals("y")) {
-        System.out.println("Masukan ID:");
-        String id = input.next();
-
-        if (cafe.isAMember(id)) {
-			prosesMember();
         }else{
             System.out.println("Maaf anda belum terdaftar sebagai member\n");
             System.out.println("Apakah anda ingin daftar sebagai member? y/n");
@@ -178,9 +141,10 @@ public static void kasir() {
             if (buat.equals("y")) {
             addMember();
             System.out.println("Anda telah berhasil mendaftar sebagai member!\n ");
+			proses();
             }else if(buat.equals("n")){
 				System.out.println("Silahkan melanjutkan pembelian");
-				prosesNonMember();
+				proses();
 			}else{
 				System.out.println("Input tidak valid! Silahkan ketik y untuk kembali");
 				if(buat.equals("y")){
@@ -195,8 +159,9 @@ public static void kasir() {
         if (buat.equals("y")) {
             addMember();
             System.out.println("Anda telah berhasil mendaftar sebagai member! ");
+			proses();
         }else if(buat.equals("n")){
-           prosesNonMember();
+           proses();
         }else{
 			System.out.println("Input tidak valid! Silahkan ketik y untuk kembali");
 				if(buat.equals("y")){
@@ -206,6 +171,24 @@ public static void kasir() {
     }else{
 		System.out.println("Input tidak valid! Silahkan ketik y untuk kembali");
 
+	}
+}
+	public static void proses(){
+		menuCafe();
+		System.out.println("Masukan nama anda: ");
+		input.next();
+		
+		try {
+			System.out.println("Masukan pesanan anda: ");
+			int pesanan = input.nextInt();
+			System.out.println("Masukan jumlah pesanan anda: ");
+			int jumlah = input.nextInt();
+			
+			totalHarga = listOrders.get(pesanan - 1).hargaMakanan * jumlah;
+			
+			System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
+		} catch (Exception e) {
+			System.out.println("Masukan menu yang tersedia");
 	}
 }
 
@@ -218,7 +201,7 @@ public static void kasir() {
 	private static void addMember() {
 				input.nextLine();
 
-		Member member = new Member();
+		Member member = new Member(null, null);
 		System.out.println("Masukan nama anda: ");
 		String name = input.nextLine();
 		member.setName(name);

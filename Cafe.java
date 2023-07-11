@@ -43,7 +43,7 @@ public class Cafe {
 		for (Member member : this.members) {
 			if (member.getId().equals(id)) {
 				isMember = true;
-				System.out.println("This ID is a member");
+				System.out.println("This ID is a member\n");
 			}
 		}
 	return isMember;

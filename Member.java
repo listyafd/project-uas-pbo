@@ -26,7 +26,12 @@
 	//inheritance
 	public class Member extends Buyer{
 
-		//polimorphism overriding
+		public Member(String id, String name) {
+			this.setName(name);
+			this.setId(id);
+		}
+
+        //polimorphism overriding
 		@Override
 		void data() {
 			System.out.println(getName() +" with ID "+getId());
