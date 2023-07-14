@@ -75,7 +75,7 @@ public class Main {
 	
 	public static void initCafeData() {
 		Member member1 = new Member("9999", "Lian");
-		Member member2 = new Member("2501", "Hwang");
+		Member member2 = new Member("2501", "Yuna");
 		Member member3 = new Member("0104", "Leon");
 
 		cafe.addMember(member1);
@@ -119,41 +119,58 @@ public class Main {
 		return (totalHarga-banyakDiskon);
 	}
 
+
 	public static void kasir() {
 		System.out.println("Apakah anda memiliki member? y/n");
 		String aMember = input.next();
 
 		if(aMember.equals("y")){
-			System.out.println("Masukan ID:");
-			String id = input.next();
-	
-			
+			proses();
+		}else if(aMember.equals("n")){
+		System.out.println("Apakah anda ingin daftar sebagai member? y/n");
+		String daftar = input.next();
+				if(daftar.equals("y")){
+					addMember();
+					proses();	
+				}else if(daftar.equals("n")){
+					System.out.println("Silahkan melanjutkan pembelian");
+					proses();
+				}else{
+					System.out.println("Inputan tidak valid");
+				}
+			}else{
+			System.out.println("invalid input");
 		}
 	}
+	
 
 
-	public static void proses(){
+	public static void proses() {
 		menuCafe();
-		System.out.println("Masukan nama anda: ");
-		input.next();
-		
+		System.out.println("Masukan ID anda: ");
+		String id = input.next();
 		try {
 			System.out.println("Masukan pesanan anda: ");
 			int pesanan = input.nextInt();
 			System.out.println("Masukan jumlah pesanan anda: ");
 			int jumlah = input.nextInt();
-			
+	
 			totalHarga = listOrders.get(pesanan - 1).hargaMakanan * jumlah;
 			
-			System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
-			if(cafe.isAMember(null)){
-			System.out.println("Selamat anda mendapatkan diskon sebesar " + discount(0.05, totalHarga)+"\n");
-			System.out.println("Jadi total belanjaan anda sebesar " + discount(totalHarga, discount(0.05, totalHarga))+"\n");
+			if (cafe.isAMember(id)) {
+				discount(0.05, totalHarga);
+				discount(totalHarga, discount(0.05, totalHarga));
+				System.out.println("Selamat anda mendapatkan diskon sebesar " + discount(0.05, totalHarga)+"\n");
+				System.out.println("Jadi total belanjaan anda sebesar " + discount(totalHarga, discount(0.05, totalHarga))+"\n");	
+			}else{
+				System.out.println("Anda tidak terdaftar sebagai member");
+				System.out.println("Total belanjaan anda sebesar: Rp " + totalHarga);
 			}
 		} catch (Exception e) {
 			System.out.println("Masukan menu yang tersedia");
+		}
 	}
-}
+	
 
 	private static void showMembers() {
 		for (Member member : cafe.getMembers()) {
